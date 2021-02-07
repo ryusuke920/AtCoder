@@ -1,26 +1,34 @@
-from collections import deque
+from heapq import heappush, heappop
 n, m = map(int,input().split())
-if n == 2:
-    exit(print(1))
-graph = [[] for _ in range(n)]
-ab = [[0, 0] for _ in range(m)]
+a = [0] * m
+b = [0] * m
 for i in range(m):
-    a, b = map(int,input().split())
-    ab[i][0], ab[i][1] = a, b
-    graph[a - 1].append(b - 1)
-    graph[b - 1].append(a - 1)
-print(*graph)
-print(*ab)
-ans = 0
-def bfs(E): # 除くエッジ
-    q = deque()
-    if E != 0:
-        q.append([ab[0][0], ab[0][1]]) # 結ぶエッジ
-    else:
-        q.append([ab[1][0], ab[1][1]]) # 結ぶエッジ
-    dist = [10000] * n
-    while q:
-        v = q.popleft() # エッジを２つ取り出す
-        for i in graph
+    a[i], b[i] = map(int,input().split())
 
+def dijkstra(s, num): # 始点・取り除く辺のindex番号
+    graph_removed = [[] for _ in range(n)] # １つの辺を除いた隣接行列
+    for i in range(m):
+        if i != num:
+            graph_removed[a[i] - 1].append(b[i] - 1)
+            graph_removed[b[i] - 1].append(a[i] - 1)
+    dist = [10 ** 18] * n
+    check = [False] * n
+    dist[s] = 0
+    q = [(0, s)] # 距離・ノード
+    while q:
+        v = heappop(q)[1] # 今いるノード
+        if check[v]: continue
+        check[v] = True
+        for i in graph_removed[v]: # 先のノード
+            if check[i] != False: continue
+            if dist[i] <= dist[v] + 1: continue
+            dist[i] = dist[v] + 1
+            heappush(q, (dist[i], i))
+    return dist
+
+ans = 0 # 取り除いたほうが良い辺の数
+for i in range(m):
+    x = dijkstra(0, i) # 始点は常に0からスタートとする（便宜上）・取り除くエッジのindex
+    if 10 ** 18 in x: # 更新されてないってことは除いた辺なしではたどり着けない！！
+        ans += 1
 print(ans)
