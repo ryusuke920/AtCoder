@@ -1,17 +1,16 @@
-N,W = map(int,input().split())
-w = []
+n, w = map(int,input().split())
 v = []
-for i in range(N):
-    x,y = map(int,input().split())
-    w.append(x)
-    v.append(y)
+weight = []
+for i in range(n):
+    x, y = map(int,input().split())
+    v.append(x)
+    weight.append(y)
 
-dp = [[0]*(W+1) for j in range(N+1)] # DPテーブルの作成
-for i in range(N):
-    for j in range(W+1):
-        if j < w[i]: # 選ばない時
-            dp[i+1][j] = dp[i][j]
+dp = [[0] * (w + 1) for j in range(n + 1)] # DPテーブルの作成
+for i in range(n):
+    for j in range(w + 1):
+        if j < weight[i]: # 選ばない時
+            dp[i + 1][j] = dp[i][j]
         else: # 選ぶ時
-            dp[i+1][j] = max(dp[i][j],dp[i][j-w[i]]+v[i])
-
-print(dp[N][W])
+            dp[i + 1][j] = max(dp[i][j],dp[i][j - weight[i]] + v[i])
+print(dp[n][w])
