@@ -1,27 +1,12 @@
-N = int(input())
-lis=[]
+n = int(input())
+bank = [59049, 46656, 7776, 6561, 1296, 729, 216, 81, 36, 9, 6, 1]
 
-temp = 6
-while temp <= N:
-    lis.append(temp)
-    temp *= 6
-
-temp = 9
-while temp <= N:
-    lis.append(temp)
-    temp *= 9
-
-lis.sort(reverse = True)
-
-dp = [10 ** 9] * (N + 1)
+dp = [10 ** 9] * (n + 1)
 dp[0] = 0
 
-for item in lis:
-    for i in range(N + 1):
-        if i + item <= N:
+for item in bank:
+    for i in range(n + 1):
+        if i + item <= n:
             dp[i + item] = min(dp[i] + 1, dp[i + item])
-print(dp)
-ans = 10 ** 10
-for index, item in enumerate(dp):
-    ans = min(ans, item + N - index)
-print(ans)
+
+print(dp[n])
